@@ -65,6 +65,100 @@ select {
 
 .brand-dot {
   color: #dc2626;
+  cursor: pointer;
+}
+
+.game-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.85);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.game-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.game-panel {
+  width: min(92vw, 860px);
+  max-height: 92vh;
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.25);
+  overflow: hidden;
+}
+
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  background: #f8fafc;
+}
+
+.game-header h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.game-close {
+  border: none;
+  background: transparent;
+  color: #334155;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.game-canvas-wrap {
+  position: relative;
+  background: #0f172a;
+}
+
+#game-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.game-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.25rem 1.25rem;
+  font-size: 0.95rem;
+  color: #475569;
+}
+
+.game-message {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  .page-links-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .game-panel {
+    width: min(98vw, 98vw);
+  }
+
+  .page-links-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .nav-links {
