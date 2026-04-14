@@ -113,6 +113,40 @@ select {
   font-size: 1.05rem;
 }
 
+.hero-section {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.page-links-section {
+  padding-top: 2rem;
+}
+
+.page-links-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.page-link-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 170px;
+  background: #f8fafc;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  color: #0f172a;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.page-link-card:hover {
+  transform: translateY(-2px);
+  background: #e2e8f0;
+}
+
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
