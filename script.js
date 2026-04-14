@@ -104,8 +104,8 @@ function createGameOverlay() {
     paddleX: (canvas.width - settings.paddleWidth) / 2,
     ballX: canvas.width / 2,
     ballY: canvas.height - 60,
-    ballSpeedX: 4,
-    ballSpeedY: -4,
+    ballSpeedX: 3,
+    ballSpeedY: -3,
     bricks: [],
     isLaunched: false,
     isRunning: false,
@@ -259,8 +259,8 @@ function createGameOverlay() {
     state.paddleX = (canvas.width - settings.paddleWidth) / 2;
     state.ballX = canvas.width / 2;
     state.ballY = canvas.height - 60;
-    state.ballSpeedX = 4;
-    state.ballSpeedY = -4;
+    state.ballSpeedX = 3;
+    state.ballSpeedY = -3;
     state.isLaunched = false;
     state.isRunning = true;
     state.score = 0;
@@ -274,6 +274,7 @@ function createGameOverlay() {
 
   function openOverlay() {
     container.classList.add("active");
+    canvas.style.cursor = "ew-resize";
     if (!state.isRunning) {
       resetGame();
     }
@@ -284,6 +285,7 @@ function createGameOverlay() {
   function closeOverlay() {
     container.classList.remove("active");
     state.isRunning = false;
+    canvas.style.cursor = "default";
     window.removeEventListener("keydown", handleKeys);
     canvas.removeEventListener("mousemove", handleMouseMove);
   }
