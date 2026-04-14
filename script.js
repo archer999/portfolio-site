@@ -28,13 +28,20 @@ document.addEventListener("DOMContentLoaded", () => {
     "arrowright",
     "arrowleft",
     "arrowright",
-    "b",
-    "a",
+    "keyb",
+    "keya",
   ];
   let konamiIndex = 0;
 
+  function normalizeKey(event) {
+    if (event.code) {
+      return event.code.toLowerCase();
+    }
+    return event.key.toLowerCase();
+  }
+
   window.addEventListener("keydown", (event) => {
-    const key = event.key.toLowerCase();
+    const key = normalizeKey(event);
     if (key === konamiCode[konamiIndex]) {
       konamiIndex += 1;
       if (konamiIndex === konamiCode.length) {
