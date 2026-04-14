@@ -260,15 +260,17 @@ select {
   aspect-ratio: 1 / 1;
 }
 
-.gallery-image {
+.gallery-card img,
+.portfolio-img {
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center;
+  object-fit: cover;
+  display: block;
   transition: transform 0.35s ease;
 }
 
-.gallery-card:hover .gallery-image {
+.gallery-card:hover img,
+.gallery-card:hover .portfolio-img {
   transform: scale(1.05);
 }
 

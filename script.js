@@ -18,6 +18,39 @@ document.addEventListener("DOMContentLoaded", () => {
   brandDot.addEventListener("click", () => {
     overlay.open();
   });
+
+  const konamiCode = [
+    "arrowup",
+    "arrowup",
+    "arrowdown",
+    "arrowdown",
+    "arrowleft",
+    "arrowright",
+    "arrowleft",
+    "arrowright",
+    "b",
+    "a",
+  ];
+  let konamiIndex = 0;
+
+  window.addEventListener("keydown", (event) => {
+    const key = event.key.toLowerCase();
+    if (key === konamiCode[konamiIndex]) {
+      konamiIndex += 1;
+      if (konamiIndex === konamiCode.length) {
+        overlay.open();
+        konamiIndex = 0;
+      }
+      return;
+    }
+
+    if (key === "arrowup") {
+      konamiIndex = 1;
+      return;
+    }
+
+    konamiIndex = 0;
+  });
 });
 
 function createGameOverlay() {
