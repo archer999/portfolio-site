@@ -20,29 +20,32 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const konamiCode = [
-    "arrowup",
-    "arrowup",
-    "arrowdown",
-    "arrowdown",
-    "arrowleft",
-    "arrowright",
-    "arrowleft",
-    "arrowright",
-    "keyb",
-    "keya",
+    ["arrowup"],
+    ["arrowup"],
+    ["arrowdown"],
+    ["arrowdown"],
+    ["arrowleft"],
+    ["arrowright"],
+    ["arrowleft"],
+    ["arrowright"],
+    ["b", "keyb"],
+    ["a", "keya"],
   ];
   let konamiIndex = 0;
 
   function normalizeKey(event) {
-    if (event.code) {
-      return event.code.toLowerCase();
-    }
-    return event.key.toLowerCase();
+    const key = event.key ? event.key.toLowerCase() : "";
+    const code = event.code ? event.code.toLowerCase() : "";
+    return [key, code];
+  }
+
+  function matchesKonami(key, targetValues) {
+    return targetValues.includes(key[0]) || targetValues.includes(key[1]);
   }
 
   window.addEventListener("keydown", (event) => {
     const key = normalizeKey(event);
-    if (key === konamiCode[konamiIndex]) {
+    if (matchesKonami(key, konamiCode[konamiIndex])) {
       konamiIndex += 1;
       if (konamiIndex === konamiCode.length) {
         overlay.open();
@@ -51,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if (key === "arrowup") {
+    if (matchesKonami(key, konamiCode[0])) {
       konamiIndex = 1;
       return;
     }
