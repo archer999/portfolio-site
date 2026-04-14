@@ -386,6 +386,32 @@ select {
   }
 }
 
+.pdf-frame-wrap {
+  margin-top: 2rem;
+  background: #f8fafc;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 1rem;
+  overflow: hidden;
+  min-height: 72vh;
+}
+
+.pdf-frame {
+  width: 100%;
+  min-height: 72vh;
+  border: 0;
+}
+
+.pdf-copy h1 {
+  margin: 0 0 0.85rem;
+  font-size: clamp(2.7rem, 4vw, 4rem);
+}
+
+.pdf-copy p {
+  margin: 0;
+  color: #475569;
+  font-size: 1.05rem;
+}
+
 @media (max-width: 640px) {
   .topbar-inner {
     flex-direction: column;
