@@ -15,9 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const overlay = createGameOverlay();
   document.body.appendChild(overlay.container);
 
-  brandDot.addEventListener("click", () => {
-    overlay.open();
-  });
+  if (brandDot) {
+    brandDot.addEventListener("click", () => {
+      overlay.open();
+    });
+  }
 
   const konamiCode = [
     ["arrowup"],
@@ -100,18 +102,24 @@ function createGameOverlay() {
     brickHeight: 20,
   };
 
+  const baseBallSpeed = 2.4;
+  const speedIncrement = 0.6;
+  const totalBricks = settings.rowCount * settings.colCount;
+
   const state = {
     paddleX: (canvas.width - settings.paddleWidth) / 2,
     ballX: canvas.width / 2,
     ballY: canvas.height - 60,
-    ballSpeedX: 3,
-    ballSpeedY: -3,
+    ballSpeedX: baseBallSpeed,
+    ballSpeedY: -baseBallSpeed,
     bricks: [],
+    bricksRemaining: totalBricks,
+    level: 1,
     isLaunched: false,
     isRunning: false,
     score: 0,
     lives: 3,
-    messageText: "Press space to launch",
+    messageText: `Level 1 — press space to launch`,
   };
 
   const keys = { left: false, right: false };
@@ -120,6 +128,7 @@ function createGameOverlay() {
 
   function initBricks() {
     state.bricks = [];
+    state.bricksRemaining = totalBricks;
     for (let row = 0; row < settings.rowCount; row += 1) {
       const brickRow = [];
       for (let col = 0; col < settings.colCount; col += 1) {
@@ -146,9 +155,9 @@ function createGameOverlay() {
           const y = row * (settings.brickHeight + settings.brickPadding) + settings.brickOffsetTop;
           brick.x = x;
           brick.y = y;
-          context.fillStyle = row % 2 === 0 ? "#dc2626" : "#334155";
+          context.fillStyle = row % 2 === 0 ? "#f8fafc" : "#cbd5e1";
           context.fillRect(x, y, settings.brickWidth, settings.brickHeight);
-          context.strokeStyle = "#ffffff";
+          context.strokeStyle = "rgba(15, 23, 42, 0.2)";
           context.strokeRect(x, y, settings.brickWidth, settings.brickHeight);
         }
       }
@@ -156,23 +165,28 @@ function createGameOverlay() {
   }
 
   function drawPaddle() {
-    context.fillStyle = "#0f172a";
+    context.fillStyle = "#f8fafc";
     context.fillRect(state.paddleX, canvas.height - settings.paddleHeight - 20, settings.paddleWidth, settings.paddleHeight);
   }
 
   function drawBall() {
     context.beginPath();
     context.arc(state.ballX, state.ballY, settings.ballRadius, 0, Math.PI * 2);
-    context.fillStyle = "#dc2626";
+    context.fillStyle = "#f8fafc";
     context.fill();
     context.closePath();
   }
 
   function drawScore() {
-    context.fillStyle = "#334155";
+    context.fillStyle = "#f8fafc";
     context.font = "14px Inter, system-ui, sans-serif";
     context.fillText(`Score: ${state.score}`, 16, 26);
     context.fillText(`Lives: ${state.lives}`, canvas.width - 88, 26);
+    context.fillText(`Level: ${state.level}`, canvas.width / 2 - 30, 26);
+  }
+
+  function getBallSpeed() {
+    return baseBallSpeed + (state.level - 1) * speedIncrement;
   }
 
   function update() {
@@ -209,14 +223,14 @@ function createGameOverlay() {
     ) {
       state.ballSpeedY = -Math.abs(state.ballSpeedY);
       const deltaX = state.ballX - (state.paddleX + settings.paddleWidth / 2);
-      state.ballSpeedX = deltaX * 0.15;
+      state.ballSpeedX = deltaX * 0.12;
     }
 
     if (state.ballY + settings.ballRadius > canvas.height) {
       state.lives -= 1;
       state.isLaunched = false;
-      state.ballSpeedX = 4;
-      state.ballSpeedY = -4;
+      state.ballSpeedX = getBallSpeed();
+      state.ballSpeedY = -getBallSpeed();
       state.messageText = state.lives > 0 ? "Press space to relaunch" : "Game over. Press R to restart";
       if (state.lives <= 0) {
         state.isRunning = false;
@@ -224,9 +238,13 @@ function createGameOverlay() {
     }
 
     brickCollision();
-    if (state.score === settings.rowCount * settings.colCount * 10) {
+    if (state.bricksRemaining === 0) {
+      state.level += 1;
+      initBricks();
+      state.isLaunched = false;
       state.isRunning = false;
-      state.messageText = "You win! Press R to play again";
+      state.messageText = `Level ${state.level} ready — press space to launch`;
+      resetBall();
     }
 
     message.textContent = state.messageText;
@@ -250,23 +268,33 @@ function createGameOverlay() {
           state.ballSpeedY = -state.ballSpeedY;
           brick.status = 0;
           state.score += 10;
+          state.bricksRemaining -= 1;
         }
       }
     }
   }
 
-  function resetGame() {
-    state.paddleX = (canvas.width - settings.paddleWidth) / 2;
+  function resetBall() {
+    const speed = getBallSpeed();
     state.ballX = canvas.width / 2;
     state.ballY = canvas.height - 60;
-    state.ballSpeedX = 3;
-    state.ballSpeedY = -3;
+    state.ballSpeedX = speed;
+    state.ballSpeedY = -speed;
     state.isLaunched = false;
-    state.isRunning = true;
+    state.messageText = state.lives > 0 ? `Level ${state.level} — press space to launch` : "Game over. Press R to restart";
+  }
+
+  function resetGame() {
+    state.paddleX = (canvas.width - settings.paddleWidth) / 2;
+    state.level = 1;
+    state.ballX = canvas.width / 2;
+    state.ballY = canvas.height - 60;
     state.score = 0;
     state.lives = 3;
-    state.messageText = "Press space to launch";
     initBricks();
+    state.bricksRemaining = totalBricks;
+    resetBall();
+    state.isRunning = true;
     message.textContent = state.messageText;
     draw();
     requestAnimationFrame(update);
